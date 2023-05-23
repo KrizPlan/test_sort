@@ -49,6 +49,7 @@ int insertion_sort(std::vector<int> &vector){
 
 /// @brief Realization of shell sort algorithm
 /// @param vector vector to sort
+/// @return number of swaps
 int shell_sort(std::vector<int> &vector){
     int swap_count = 0;
     for(int s = vector.size() / 2; s > 0; s /= 2){
@@ -63,7 +64,11 @@ int shell_sort(std::vector<int> &vector){
 }
 
 
-
+/// @brief Realization of quick sort algorithm
+/// @param vector vector to sort
+/// @param low start of sorted vector
+/// @param hight end of sorted vector
+/// @return number of swaps
 int quick_sort(std::vector<int> &vector, int low, int hight){
     int swap_count = 0;
     int i = low, j = hight;
