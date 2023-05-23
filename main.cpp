@@ -3,6 +3,9 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <mutex>
+
+std::mutex cout_mutex;
 
 /// @brief Function to swap values of two variables, two variables must be same type
 /// @tparam T template for function
@@ -122,6 +125,7 @@ void function_bubble_sort_in_thread(const std::vector<int>& vector){
     // count elapsed time
     elapsed_seconds = end - start;
 
+    const std::lock_guard<std::mutex> lock(cout_mutex);
     // print info in console
     std::cout<<"number of swaps in bubble sort: "<<number_of_swaps<<std::endl;
     std::cout<<"elapsed time in bubble sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
@@ -148,6 +152,7 @@ void function_insertion_sort_in_thread(const std::vector<int> &vector){
     // count elapsed time
     elapsed_seconds = end - start;
 
+    const std::lock_guard<std::mutex> lock(cout_mutex);
     // print info in console
     std::cout<<"number of swaps in insertion sort: "<<number_of_swaps<<std::endl;
     std::cout<<"elapsed time in insertion sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
@@ -174,6 +179,7 @@ void function_shell_sort_in_thread(const std::vector<int> &vector){
     // count elapsed time
     elapsed_seconds = end - start;
 
+    const std::lock_guard<std::mutex> lock(cout_mutex);
     // print info in console
     std::cout<<"number of swaps in shell sort: "<<number_of_swaps<<std::endl;
     std::cout<<"elapsed time in shell sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
@@ -200,17 +206,25 @@ void function_quick_sort_in_thread(const std::vector<int> &vector){
     // count elapsed time
     elapsed_seconds = end - start;
 
+    const std::lock_guard<std::mutex> lock(cout_mutex);
     // print info in console
     std::cout<<"number of swaps in quick sort: "<<number_of_swaps<<std::endl;
     std::cout<<"elapsed time in quick sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
 }
 
 
-int main(){   
+int main(int argc, char** argv){   
     srand((unsigned)time(NULL));
 
-    // Set vector size
-    const uint VECTOR_SIZE = 100000;
+    // set default vector size to 100.000
+    uint VECTOR_SIZE = 100000;
+
+    if(argc >= 2){
+        if(atoi(argv[1]) > 0)
+        {
+            VECTOR_SIZE = atoi(argv[1]);
+        }    
+    }
 
     // create initial vector and fill it with random numbers [-1000; 1000]
     std::vector<int> v_initial;
