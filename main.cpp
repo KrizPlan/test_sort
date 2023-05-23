@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <chrono>
 
 /// @brief Function to swap values of two variables, two variables must be same type
 /// @tparam T template for function
@@ -93,7 +94,7 @@ int main(){
     srand((unsigned)time(NULL));
 
     // Set vector size
-    const uint VECTOR_SIZE = 1000;
+    const uint VECTOR_SIZE = 100000;
 
     // create initial vector and fill it with random numbers [-1000; 1000]
     std::vector<int> v_initial;
@@ -109,12 +110,83 @@ int main(){
     std::vector<int> v_shell = v_initial;
     std::vector<int> v_quick = v_initial;
 
-    // call functions to sort vectors and get number of swaps in each algorithm
-    std::cout<<"number of swaps in bubble sort: "<<bubble_sort(v_bubble)<<std::endl;
-    std::cout<<"number of swaps in insertion sort: "<<insertion_sort(v_insertion)<<std::endl;
-    std::cout<<"number of swaps in shell sort: "<<shell_sort(v_shell)<<std::endl;
-    std::cout<<"number of swaps in quick sort: "<<quick_sort(v_quick, 0, v_quick.size() - 1)<<std::endl;
+    // create variable to store elapsed seconds in each algorithm
+    std::chrono::duration<double> elapsed_seconds;
 
+    std::cout<<"Vector size = "<<VECTOR_SIZE<<std::endl<<std::endl;
+
+
+    /////////////////////////////
+    // Bubble sort
+    /////////////////////////////
+
+    // call bubble sort function and print number of swaps and elapsed time
+    std::cout<<"\tBubble sort"<<std::endl;
+
+    // Get time before call bubble_sort function
+    auto start = std::chrono::system_clock::now();
+
+    std::cout<<"number of swaps: "<<bubble_sort(v_bubble)<<std::endl;
+    
+    // Get time after call bubble_sort function
+    auto end = std::chrono::system_clock::now();
+    
+    elapsed_seconds = end - start;
+    std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+
+    /////////////////////////////
+    // Insertion sort
+    /////////////////////////////
+
+    // call insertion sort function and print number of swaps and elapsed time
+    std::cout<<"\tInsertion sort"<<std::endl;
+
+    // Get time before call insertion_sort function
+    start = std::chrono::system_clock::now();
+
+    std::cout<<"number of swaps: "<<insertion_sort(v_insertion)<<std::endl;
+    
+    // Get time after call insertion_sort function
+    end = std::chrono::system_clock::now();
+    
+    elapsed_seconds = end - start;
+    std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+
+    /////////////////////////////
+    // Shell sort
+    /////////////////////////////
+
+    // call shell sort function and print number of swaps and elapsed time
+    std::cout<<"\tShell sort"<<std::endl;
+
+    // Get time before call shell_sort function
+    start = std::chrono::system_clock::now();
+
+    std::cout<<"number of swaps: "<<shell_sort(v_shell)<<std::endl;
+    
+    // Get time after call shell_sort function
+    end = std::chrono::system_clock::now();
+    
+    elapsed_seconds = end - start;
+    std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+
+    /////////////////////////////
+    // Quick sort
+    /////////////////////////////
+
+    // call quick sort function and print number of swaps and elapsed time
+    std::cout<<"\tQuick sort"<<std::endl;
+
+    // Get time before call quick_sort function
+    start = std::chrono::system_clock::now();
+
+    std::cout<<"number of swaps: "<<quick_sort(v_quick, 0, v_quick.size())<<std::endl;
+    
+    // Get time after call quick_sort function
+    end = std::chrono::system_clock::now();
+    
+    elapsed_seconds = end - start;
+    std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
 
     return 0;
 }
