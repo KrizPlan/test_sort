@@ -1,8 +1,8 @@
 # test_sort
-Simple program to compare some sort alghoritms
+Simple program to compare some sort algorithms.
 
 ## Build programm
-To build this program run commands
+To build this program run commands:
 ```
 mkdir build
 cmake -B build/
