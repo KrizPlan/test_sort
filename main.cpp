@@ -103,116 +103,6 @@ int quick_sort(std::vector<int> &vector, int low, int hight){
     return swap_count;
 }
 
-
-/// @brief Function that run bubble sort for vector and measurement elapsed time
-/// @param vector reference to the vector to be copied for sorting
-void function_bubble_sort_in_thread(const std::vector<int>& vector){
-    // create copy of vector
-    std::vector<int> v_bubble = vector;
-
-    // create variable to store elapsed seconds in each algorithm
-    std::chrono::duration<double> elapsed_seconds;
-
-    // get time before call bubble_sort function
-    auto start = std::chrono::system_clock::now();
-
-    // run bubble_sort function and store number of swaps
-    int number_of_swaps = bubble_sort(v_bubble);
-
-    // get time after call bubble_sort function
-    auto end = std::chrono::system_clock::now();
-    
-    // count elapsed time
-    elapsed_seconds = end - start;
-
-    const std::lock_guard<std::mutex> lock(cout_mutex);
-    // print info in console
-    std::cout<<"number of swaps in bubble sort: "<<number_of_swaps<<std::endl;
-    std::cout<<"elapsed time in bubble sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
-}
-
-/// @brief Function that run insertion sort for vector and measurement elapsed time
-/// @param vector reference to the vector to be copied for sorting
-void function_insertion_sort_in_thread(const std::vector<int> &vector){
-    // create copy of vector
-    std::vector<int> v_insertion = vector;
-
-    // create variable to store elapsed seconds in each algorithm
-    std::chrono::duration<double> elapsed_seconds;
-
-    // Get time before call insertion_sort function
-    auto start = std::chrono::system_clock::now();
-
-    // run insertion_sort function and store number of swaps
-    int number_of_swaps = insertion_sort(v_insertion);
-    
-    // Get time after call insertion_sort function
-    auto end = std::chrono::system_clock::now();
-    
-    // count elapsed time
-    elapsed_seconds = end - start;
-
-    const std::lock_guard<std::mutex> lock(cout_mutex);
-    // print info in console
-    std::cout<<"number of swaps in insertion sort: "<<number_of_swaps<<std::endl;
-    std::cout<<"elapsed time in insertion sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
-}
-
-/// @brief Function that run shell sort for vector and measurement elapsed time
-/// @param vector reference to the vector to be copied for sorting
-void function_shell_sort_in_thread(const std::vector<int> &vector){
-    // create copy of vector
-    std::vector<int> v_shell = vector;
-
-    // create variable to store elapsed seconds in each algorithm
-    std::chrono::duration<double> elapsed_seconds;
-
-    // Get time before call shell_sort function
-    auto start = std::chrono::system_clock::now();
-
-    // run shell_sort function and store number of swaps
-    int number_of_swaps = shell_sort(v_shell);
- 
-    // Get time after call shell_sort function
-    auto end = std::chrono::system_clock::now();
-    
-    // count elapsed time
-    elapsed_seconds = end - start;
-
-    const std::lock_guard<std::mutex> lock(cout_mutex);
-    // print info in console
-    std::cout<<"number of swaps in shell sort: "<<number_of_swaps<<std::endl;
-    std::cout<<"elapsed time in shell sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
-}
-
-/// @brief Function that run quick sort for vector and measurement elapsed time
-/// @param vector reference to the vector to be copied for sorting
-void function_quick_sort_in_thread(const std::vector<int> &vector){
-    // create copy of vector
-    std::vector<int> v_quick = vector;
-
-    // create variable to store elapsed seconds in each algorithm
-    std::chrono::duration<double> elapsed_seconds;
-
-    // Get time before call quick_sort function
-    auto start = std::chrono::system_clock::now();
-
-    // run quick_sort function and store number of swaps
-    int number_of_swaps = quick_sort(v_quick, 0, v_quick.size() - 1);
-    
-    // Get time after call quick_sort function
-    auto end = std::chrono::system_clock::now();
-
-    // count elapsed time
-    elapsed_seconds = end - start;
-
-    const std::lock_guard<std::mutex> lock(cout_mutex);
-    // print info in console
-    std::cout<<"number of swaps in quick sort: "<<number_of_swaps<<std::endl;
-    std::cout<<"elapsed time in quick sort: "<<elapsed_seconds.count()<<"s"<<std::endl;
-}
-
-
 int main(int argc, char** argv){   
     srand((unsigned)time(NULL));
 
@@ -236,11 +126,117 @@ int main(int argc, char** argv){
 
     std::cout<<"Vector size = "<<VECTOR_SIZE<<std::endl<<std::endl;
 
-    // Create thread for sort algorithms, one thread - one alghoritm
-    std::thread th_bubble_sort(function_bubble_sort_in_thread, std::ref(v_initial));
-    std::thread th_insertion_sort(function_insertion_sort_in_thread, std::ref(v_initial));
-    std::thread th_shell_sort(function_shell_sort_in_thread, std::ref(v_initial));
-    std::thread th_quick_sort(function_quick_sort_in_thread, std::ref(v_initial));
+
+    // Create thread for bubble sort with lambda function
+    std::thread th_bubble_sort([](const std::vector<int> &vector){
+        // create copy of vector
+        std::vector<int> v_bubble = vector;
+
+        // create variable to store elapsed seconds in each algorithm
+        std::chrono::duration<double> elapsed_seconds;
+
+        // get time before call bubble_sort function
+        auto start = std::chrono::system_clock::now();
+
+        // run bubble_sort function and store number of swaps
+        int number_of_swaps = bubble_sort(v_bubble);
+
+        // get time after call bubble_sort function
+        auto end = std::chrono::system_clock::now();
+        
+        // count elapsed time
+        elapsed_seconds = end - start;
+
+        const std::lock_guard<std::mutex> lock(cout_mutex);
+        // print info in console
+        std::cout<<"======\tBubble sort\t======"<<std::endl;
+        std::cout<<"number of swaps: "<<number_of_swaps<<std::endl;
+        std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+    }, std::ref(v_initial));
+
+    
+    // Create thread for insertion sort with lambda function
+    std::thread th_insertion_sort([](const std::vector<int> &vector){
+        // create copy of vector
+        std::vector<int> v_insertion = vector;
+
+        // create variable to store elapsed seconds in each algorithm
+        std::chrono::duration<double> elapsed_seconds;
+
+        // Get time before call insertion_sort function
+        auto start = std::chrono::system_clock::now();
+
+        // run insertion_sort function and store number of swaps
+        int number_of_swaps = insertion_sort(v_insertion);
+        
+        // Get time after call insertion_sort function
+        auto end = std::chrono::system_clock::now();
+        
+        // count elapsed time
+        elapsed_seconds = end - start;
+
+        const std::lock_guard<std::mutex> lock(cout_mutex);
+        // print info in console
+        std::cout<<"======\tInsertion sort\t======"<<std::endl;
+        std::cout<<"number of swaps: "<<number_of_swaps<<std::endl;
+        std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+    }, std::ref(v_initial));
+
+
+    // Create thread for shell sort with lambda function
+    std::thread th_shell_sort([](const std::vector<int> &vector){
+        // create copy of vector
+        std::vector<int> v_shell = vector;
+
+        // create variable to store elapsed seconds in each algorithm
+        std::chrono::duration<double> elapsed_seconds;
+
+        // Get time before call shell_sort function
+        auto start = std::chrono::system_clock::now();
+
+        // run shell_sort function and store number of swaps
+        int number_of_swaps = shell_sort(v_shell);
+    
+        // Get time after call shell_sort function
+        auto end = std::chrono::system_clock::now();
+        
+        // count elapsed time
+        elapsed_seconds = end - start;
+
+        const std::lock_guard<std::mutex> lock(cout_mutex);
+        // print info in console
+        std::cout<<"======\tShell sort\t======"<<std::endl;
+        std::cout<<"number of swaps: "<<number_of_swaps<<std::endl;
+        std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+    }, std::ref(v_initial));
+
+
+    // Create thread for quick sort with lambda function
+    std::thread th_quick_sort([](const std::vector<int> &vector){
+        // create copy of vector
+        std::vector<int> v_quick = vector;
+
+        // create variable to store elapsed seconds in each algorithm
+        std::chrono::duration<double> elapsed_seconds;
+
+        // Get time before call quick_sort function
+        auto start = std::chrono::system_clock::now();
+
+        // run quick_sort function and store number of swaps
+        int number_of_swaps = quick_sort(v_quick, 0, v_quick.size() - 1);
+        
+        // Get time after call quick_sort function
+        auto end = std::chrono::system_clock::now();
+
+        // count elapsed time
+        elapsed_seconds = end - start;
+
+        const std::lock_guard<std::mutex> lock(cout_mutex);
+        // print info in console
+        std::cout<<"======\tQuick sort\t======"<<std::endl;
+        std::cout<<"number of swaps: "<<number_of_swaps<<std::endl;
+        std::cout<<"elapsed time: "<<elapsed_seconds.count()<<"s"<<std::endl;
+    }, std::ref(v_initial));
 
 
     // Wait all algorithms finished
